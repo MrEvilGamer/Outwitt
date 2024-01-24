@@ -3,8 +3,12 @@
 #define MEMORY_H
 
 #include <Windows.h>
+#include <TlHelp32.h>
 #include <vector>
-#include <string>
+#include <iostream>
+
+bool IsProcessRunning(const char* processName);
+DWORD GetProcessIdFromName(const char* processName);
 
 class MemoryScanner {
 private:
@@ -16,16 +20,19 @@ private:
 public:
     MemoryScanner(HANDLE handle, uintptr_t baseAddr, size_t size);
 
-    // Read memory into the buffer
     bool ReadMemory();
 
-    // ... other member functions ...
+    // Function to find pattern in the buffer
+    uintptr_t FindPattern(const std::vector<uint8_t>& pattern);
 
-    // Helper function to check if a process is running
-    static bool IsProcessRunning(const char* processName);
+    // Function to find UWorld offset
+    uintptr_t FindUWorldOffset();
 
-    // Helper function to convert hex string to byte vector
-    static std::vector<uint8_t> HexStringToBytes(const std::string& hex);
+    // Function to find GObject offset
+    uintptr_t FindGObjectOffset();
+
+    // Function to find GName offset
+    uintptr_t FindGNameOffset();
 };
 
 #endif // MEMORY_H
